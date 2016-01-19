@@ -1,0 +1,40 @@
+{
+	"playerName": "Taylor Hall",
+
+	"gamesPlayed" : 20,
+
+	"goals" : {"last 3": [1, 2, 3],
+				"last 5" : [1, 2, 3, 4, 5],
+				"last 10" : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+				"total" : 50
+				}
+			,
+
+	"assists" : {"last 3" : [0, 1, 2],
+				"last 5" : [0, 1, 2, 3, 4],
+				"last 10" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+				"total" : 12
+				},		
+
+	"points" : {"last 3" : [3, 2, 1],
+				"last 5" : [3, 2, 1, 4, 5],
+				"last 10" : [3, 2, 1, 4, 5, 6, 7, 8, 9, 0],
+				"total" : 12
+				},
+
+	"plusMinus" : 12,
+
+	"penaltyMinutes" : 50, 
+
+	"ppPoints" : {"last 5" : 10, 
+				  "total" : 100
+				  },
+
+	"ppGoals" : {"last 5" : 5,
+				"total": 50
+				},
+
+	"shots" : 200
+
+
+}
