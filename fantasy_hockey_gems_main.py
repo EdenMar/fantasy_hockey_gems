@@ -8,8 +8,9 @@ import datetime
 
 
 
-# runs if it's determined that no existing data on players exists
-def populateDatabase():
+# updates and creates a database of individual player stats
+def updateDatabase():
+
 
 	if not (os.path.isdir("Player Stats")):
 		os.makedirs("Player Stats")
@@ -26,19 +27,91 @@ def populateDatabase():
 	skaterData = data['data']	
 
 	for player in skaterData:
+
 		name = player['playerName']
-		gamesPlayed = player['gamesPlayed']
-		goals = player['goals']
-		assists = player['assists']
-		points = player['points']
-		plusMinus = player['plusMinus']
-		penaltyMinutes = player['penaltyMinutes']
-		ppPoints = player['ppPoints']
-		ppGoals = player['ppGoals']
-		shots = player['shots']
-		f = open("Player Stats" + name + ".json")
+		gamesPlayedNew = player['gamesPlayed']
+		goalsNew = player['goals']
+		assistsNew = player['assists']
+		pointsNew = player['points']
+		plusMinusNew = player['plusMinus']
+		penaltyMinutesNew = player['penaltyMinutes']
+		ppPointsNew = player['ppPoints']
+		ppGoalsNew = player['ppGoals']
+		shGoalsNew = player['shGoals']
+		shotsNew = player['shots']
 
+		# if a json file of that player doesn't exist, create it
+		if not os.path.isfile("Player Stats/" + name + ".json"):
 
+			# https://docs.python.org/3/library/json.html
+			# http://stackoverflow.com/questions/12309269/how-do-i-write-json-data-to-a-file-in-python
+			# b = json.dumps({'playerName':name, 'gamesPlayed':gamesPlayed, 'goals':{'last 3':[goals] + []}})
+			outputData = {	
+			"playerName": playerName,
+			"gamesPlayed" : gamesPlayedNew,
+			"goals" : {"last 3": [goalsNew, 0, 0],
+						"last 5" : [goalsNew, 0, 0, 0, 0],
+						"last 10" : [goalsNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"total" : goalsNew
+						}
+					,
+			"assists" : {"last 3" : [assistsNew, 0, 0],
+						"last 5" : [assistsNew, 0, 0, 0, 0],
+						"last 10" : [assistsNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"total" : assistsNew
+						},		
+			"points" : {"last 3" : [pointsNew, 0, 0],
+						"last 5" : [pointsNew, 0, 0, 0, 0],
+						"last 10" : [pointsNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"total" : pointsNew
+						},
+			"plusMinus" : plusMinusNew,
+			"penaltyMinutes" : penaltyMinutesNew, 
+			"ppPoints" : {"last 5" : [ppPointsNew, 0, 0, 0, 0], 
+						  "total" : [ppPointsNew, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+						  },
+			"ppGoals" : {"last 5" : [ppGoalsNew, 0, 0, 0, 0],
+						"total": ppGoalsNew
+						},
+			"shGoals" : {"total" : shGoalsNew
+						},			
+			"shots" : shotsNew
+			}
+			with open("Player Stats/" + name + ".json", "w") as outfile:
+				json.dump(outputData, outfile)
+
+			outfile.close()
+
+		# data exists, but update it
+		else:
+
+			with open("Player Stats/" + name + ".json") as statsFile:
+				playerStats = json.load(statsFile)
+
+			name = playerStats['playerName']
+			gamesPlayedOld = playerStats['gamesPlayed']
+			#dict
+			goalsOld = playerStats['goals']
+			#dict
+			assistsOld = playerStats['assists']
+			#dict
+			pointsOld = playerStats['points']
+			plusMinusOld = playerStats['plusMinus']
+			penaltyMinutesOld = playerStats['penaltyMinutes']
+			#dict
+			ppPointsOld = playerStats['ppPoints']
+			#dict
+			ppGoalsOld = playerStats['ppGoals']
+			shGoalsOld = playerStats['shGoals']
+			shotsOld = playerStats['shots']	
+
+			if (gamesPlayedOld == gamesPlayedNew):
+				pass
+
+			else:
+
+				playerStats['gamesPlayed'] = gamesPlayedNew
+				playerStats['goals']['last 3']			
 
 	return
 
