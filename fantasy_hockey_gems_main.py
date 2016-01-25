@@ -24,10 +24,16 @@ def updateDatabase():
 	with open("Daily Stats/" + now.isoformat() + " Player Stats") as f:
 		data = json.load(f)
 
-	f.close()	
+	f.close()
+
+	with open("Daily Stats/" + now.isoformat() + " Goalie Stats") as f2:
+		data2 = json.load(f2)
+
+	f2.close()
 
 	# all JSON data loaded in here; unordered list
-	skaterData = data['data']	
+	skaterData = data['data']
+	goalieData = data2['data']	
 
 	for player in skaterData:
 
@@ -154,6 +160,9 @@ def updateDatabase():
 				statsFile.close()					
 
 
+	# for goalie in goalieData:
+		
+
 	return
 
 
@@ -209,3 +218,20 @@ def getDailyStats():
 
 	return
 
+def generateDailyReport():
+
+	biggest3Goals = {}
+	biggest5Goals = {}
+	biggest10Goals = {}
+	biggest3Assists = {}
+	biggest5Assists = {}
+	biggest10Assists = {}
+	biggest5Points = {}
+	biggest10Points = {}
+	biggest3Points = {}
+
+	if not (os.path.isdir("Daily Reports")):
+		os.makedirs("Daily Reports")
+
+
+	return
