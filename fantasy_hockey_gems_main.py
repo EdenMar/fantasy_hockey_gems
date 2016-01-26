@@ -20,16 +20,15 @@ def updateDatabase():
 	getDailyStats()
 
 	now = datetime.date.today()
-	
+
+	#""
 	with open("Daily Stats/" + now.isoformat() + " Player Stats") as f:
 		data = json.load(f)
 
-	f.close()
-
+	#""
 	with open("Daily Stats/" + now.isoformat() + " Goalie Stats") as f2:
 		data2 = json.load(f2)
 
-	f2.close()
 
 	# all JSON data loaded in here; unordered list
 	skaterData = data['data']
@@ -77,7 +76,7 @@ def updateDatabase():
 			"plusMinus" : plusMinusNew,
 			"penaltyMinutes" : penaltyMinutesNew, 
 			"ppPoints" : {"last 5" : [ppPointsNew, 0, 0, 0, 0], 
-						  "total" : [ppPointsNew, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+						  "total" : ppPointsNew
 						  },
 			"ppGoals" : {"last 5" : [ppGoalsNew, 0, 0, 0, 0],
 						"total": ppGoalsNew
@@ -89,15 +88,12 @@ def updateDatabase():
 			with open("Player Stats/" + playerName + ".json", "w") as outfile:
 				json.dump(outputData, outfile)
 
-			outfile.close()
 
 		# data exists, but update it
 		else:
 
 			with open("Player Stats/" + playerName + ".json") as statsFile:
 				playerStats = json.load(statsFile)
-
-			statsFile.close()
 
 			gamesPlayedOld = playerStats['gamesPlayed']
 			#dict
@@ -154,14 +150,14 @@ def updateDatabase():
 				playerStats['shGoals'] = shGoalsNew
 				playerStats['shots'] = shotsNew
 
-				with open("Player Stats/" + name + ".json", "w") as statsFile:
+				with open("Player Stats/" + playerName + ".json", "w") as statsFile:
 					json.dump(playerStats, statsFile)
 
-				statsFile.close()					
+					
 
 
 	# for goalie in goalieData:
-		
+
 
 	return
 
@@ -220,18 +216,104 @@ def getDailyStats():
 
 def generateDailyReport():
 
-	biggest3Goals = {}
-	biggest5Goals = {}
-	biggest10Goals = {}
-	biggest3Assists = {}
-	biggest5Assists = {}
-	biggest10Assists = {}
-	biggest5Points = {}
-	biggest10Points = {}
-	biggest3Points = {}
+	#key will be sum of last 3, 5 or 10, values the list of players
+	_3Goals = {}
+	_5Goals = {}
+	_10Goals = {}
+	_3Assists = {}
+	_5Assists = {}
+	_10Assists = {}
+	_5Points = {}
+	_10Points = {}
+	_3Points = {}
 
 	if not (os.path.isdir("Daily Reports")):
 		os.makedirs("Daily Reports")
 
+	for f in os.listdir("Player Stats"):
+		
+		with open("Player Stats/" + f) as playerFile:
+			data = json.load(playerFile)
+
+		name = data['playerName']
+
+		tmp = sum(data['goals']['last 3'])
+
+		if tmp in _3Goals:
+			_3Goals[tmp].append(name)
+		else:
+			_3Goals[tmp] = [name]
+
+		tmp = sum(data['goals']['last 5'])
+
+		if tmp in _5Goals:
+			_5Goals[tmp].append(name)
+		else:
+			_5Goals[tmp] = [name]
+
+		tmp = sum(data['goals']['last 10'])
+
+		if tmp in _10Goals:
+			_10Goals[tmp].append(name)
+		else:
+			_10Goals[tmp] = [name]
+
+		tmp = sum(data['assists']['last 3'])
+
+		if tmp in _3Assists:
+			_3Assists[tmp].append(name)
+		else:
+			_3Assists[tmp] = [name]
+
+		tmp = sum(data['assists']['last 5'])
+
+		if tmp in _5Assists:
+			_5Assists[tmp].append(name)
+		else:
+			_5Assists[tmp] = [name]
+
+		tmp = sum(data['assists']['last 10'])
+
+		if tmp in _10Assists:
+			_10Assists[tmp].append(name)
+		else:
+			_10Assists[tmp] = [name]
+
+		tmp = sum(data['points']['last 3'])
+
+		if tmp in _3Points:
+			_3Points[tmp].append(name)
+		else:
+			_3Points[tmp] = [name]
+
+		tmp = sum(data['points']['last 5'])
+
+		if tmp in _5Points:
+			_5Points[tmp].append(name)
+		else:
+			_5Points[tmp] = [name]
+
+		tmp = sum(data['points']['last 10'])
+
+		if tmp in _10Points:
+			_10Points[tmp].append(name)
+		else:
+			_10Points[tmp] = [name]
+
+
+	sortData(_3Goals)
+	return
+
+def sortData(dictionary):
+
+	keys = list(dictionary.keys())
+	keys.sort(reverse=True)
+
+	for stat in keys:
+		print(stat)
+		print(dictionary[stat])
+
+
 
 	return
+# updateDatabase()
