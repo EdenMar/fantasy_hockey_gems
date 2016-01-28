@@ -214,7 +214,7 @@ def getDailyStats():
 
 	return
 
-def generateDailyReport():
+def sortDailyStats():
 
 	#key will be sum of last 3, 5 or 10, values the list of players
 	_3Goals = {}
@@ -301,19 +301,43 @@ def generateDailyReport():
 			_10Points[tmp] = [name]
 
 
-	sortData(_3Goals)
+	generateDailyReport(_3Goals, 3, 'goals')
+	generateDailyReport(_5Goals, 5, 'goals')
+	generateDailyReport(_10Goals, 10, 'goals')
+	generateDailyReport(_3Assists, 3, 'assists')
+	generateDailyReport(_5Assists, 5, 'assists')
+	generateDailyReport(_10Assists, 10, 'assists')
+	generateDailyReport(_3Points, 3, 'points')
+	generateDailyReport(_5Points, 5, 'points')
+	generateDailyReport(_10Points, 10, 'points')
+
 	return
 
-def sortData(dictionary):
+def generateDailyReport(dictionary, lastXGames, stat):
 
 	keys = list(dictionary.keys())
 	keys.sort(reverse=True)
+	n = "Name"
+	t = "Total"
 
-	for stat in keys:
-		print(stat)
-		print(dictionary[stat])
+	today = datetime.date.today().isoformat()
+	fileName = today + " Last " + str(lastXGames) + " " + stat
 
+	outfile = open("Daily Reports/" + fileName, "w")
+	outfile.write(n.ljust(30) + t.center(5) + "Last %d Games\n".rjust(30) %lastXGames)
 
+	for key in keys:
+		for name in dictionary[key]:
+
+			with open("Player Stats/" + name + ".json") as f:
+				data = json.load(f)
+
+			lastNGames = str(data[stat]['last ' + str(lastXGames)])
+
+			outfile.write(name.ljust(30) + str(key).center(5) + lastNGames.strip("[]").rjust(30) + "\n")
+
+	outfile.close()
 
 	return
 # updateDatabase()
+sortDailyStats()
