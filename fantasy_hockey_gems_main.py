@@ -156,7 +156,14 @@ def updateDatabase():
 					
 
 
-	# for goalie in goalieData:
+	for goalie in goalieData:
+		playerName = goalie['playerName']
+		gamesPlayedNew = goalie['gamesPlayed']
+		savePctgNew = goalie['savePctg']
+		winsNew = goalie['wins']
+		shutoutsNew = goalie['shutouts']
+		goalsAgainstAverageNew = goalie['goalsAgainstAverage']
+		shotsAgainstNew = goalie['shotsAgainst']
 
 
 	return
@@ -339,5 +346,6 @@ def generateDailyReport(dictionary, lastXGames, stat):
 	outfile.close()
 
 	return
+
 # updateDatabase()
 sortDailyStats()
