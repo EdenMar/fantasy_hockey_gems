@@ -34,6 +34,8 @@ def updateDatabase():
 	skaterData = data['data']
 	goalieData = data2['data']	
 
+	"""This for loop parses through the forward and defensemen positions and their stats"""
+
 	for player in skaterData:
 
 		playerName = player['playerName']
@@ -97,25 +99,27 @@ def updateDatabase():
 				playerStats = json.load(statsFile)
 
 			gamesPlayedOld = playerStats['gamesPlayed']
-			#dict
-			goalsOld = playerStats['goals']
-			#dict
-			assistsOld = playerStats['assists']
-			#dict
-			pointsOld = playerStats['points']
-			plusMinusOld = playerStats['plusMinus']
-			penaltyMinutesOld = playerStats['penaltyMinutes']
-			#dict
-			ppPointsOld = playerStats['ppPoints']
-			#dict
-			ppGoalsOld = playerStats['ppGoals']
-			shGoalsOld = playerStats['shGoals']
-			shotsOld = playerStats['shots']	
 
+			#check if the player file has been changed ie player has played a game
 			if (gamesPlayedOld == gamesPlayedNew):
 				pass
 
 			else:
+
+				#dict
+				goalsOld = playerStats['goals']
+				#dict
+				assistsOld = playerStats['assists']
+				#dict
+				pointsOld = playerStats['points']
+				plusMinusOld = playerStats['plusMinus']
+				penaltyMinutesOld = playerStats['penaltyMinutes']
+				#dict
+				ppPointsOld = playerStats['ppPoints']
+				#dict
+				ppGoalsOld = playerStats['ppGoals']
+				shGoalsOld = playerStats['shGoals']
+				shotsOld = playerStats['shots']	
 
 				playerStats['gamesPlayed'] = gamesPlayedNew
 
@@ -151,15 +155,16 @@ def updateDatabase():
 				playerStats['shGoals'] = shGoalsNew
 				playerStats['shots'] = shotsNew
 
+				#rewrite the json file for the player
 				with open("Player Stats/" + playerName + ".json", "w") as statsFile:
 					json.dump(playerStats, statsFile)
-
 					
 
-
+	"""This for loop handles the stats for the goalies only"""
 	for goalie in goalieData:
 		playerName = goalie['playerName']
 		gamesPlayedNew = goalie['gamesPlayed']
+		playerPositionCode = player['playerPositionCode']
 		savePctgNew = goalie['savePctg']
 		winsNew = goalie['wins']
 		shutoutsNew = goalie['shutouts']
@@ -167,9 +172,51 @@ def updateDatabase():
 		goalsAgainstNew = goalie['goalsAgainst']
 		timeOnIceNew = goalie['timeOnIce']
 
+		if not os.path.isfile("Player Stats/" + playerName + ".json"):
+			outputData = {	
+			"playerName": playerName,
+			"gamesPlayed" : gamesPlayedNew,
+			"playerPositionCode" : playerPositionCode,
+			"savePctg" : {"last 3": [savePctgNew, 0, 0],
+						"last 5" : [savePctgNew, 0, 0, 0, 0],
+						"last 10" : [savePctgNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"total" : savePctgNew
+						},
+			"wins" : {"last 3" : [winsNew, 0, 0],
+						"last 5" : [winsNew, 0, 0, 0, 0],
+						"last 10" : [winsNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"total" : winsNew
+						},	
+			"shutouts" : {"total" : shutoutsNew
+						},
+			"shotsAgainst" : {"last 3" : [shotsAgainstNew, 0, 0],
+						"last 5" : [shotsAgainstNew, 0, 0, 0, 0],
+						"last 10" : [shotsAgainstNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"total" : shotsAgainstNew
+						},
+			"goalsAgainst" : {"last 3" : [goalsAgainstNew, 0, 0],
+						"last 5" : [goalsAgainstNew, 0, 0, 0, 0],
+						"last 10" : [goalsAgainstNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"total" : goalsAgainstNew
+						},
+			"timeOnIce" : {"last 3" : [timeOnIceNew, 0, 0],
+						"last 5" : [timeOnIceNew, 0, 0, 0, 0], 
+						"last 10" : [timeOnIceNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"total" : timeOnIceNew
+						  },
+			}
+			with open("Player Stats/" + playerName + ".json", "w") as outfile:
+				json.dump(outputData, outfile)						
 
+		else:
 
+			with open("Player Stats/" + playerName + ".json") as statsFile:
+				playerStats = json.load(statsFile)
 
+			gamesPlayedOld = playerStats['gamesPlayed']
+
+			if (gamesPlayedOld == gamesPlayedNew):
+				pass
 	return
 
 
@@ -246,72 +293,76 @@ def sortDailyStats():
 		with open("Player Stats/" + f) as playerFile:
 			data = json.load(playerFile)
 
+		if (data['playerPositionCode'] == 'G'):
+			#code for goalie reports here
+			pass
 
+		else:	
 
-		name = data['playerName']
+			name = data['playerName']
 
-		tmp = sum(data['goals']['last 3'])
+			tmp = sum(data['goals']['last 3'])
 
-		if tmp in _3Goals:
-			_3Goals[tmp].append(name)
-		else:
-			_3Goals[tmp] = [name]
+			if tmp in _3Goals:
+				_3Goals[tmp].append(name)
+			else:
+				_3Goals[tmp] = [name]
 
-		tmp = sum(data['goals']['last 5'])
+			tmp = sum(data['goals']['last 5'])
 
-		if tmp in _5Goals:
-			_5Goals[tmp].append(name)
-		else:
-			_5Goals[tmp] = [name]
+			if tmp in _5Goals:
+				_5Goals[tmp].append(name)
+			else:
+				_5Goals[tmp] = [name]
 
-		tmp = sum(data['goals']['last 10'])
+			tmp = sum(data['goals']['last 10'])
 
-		if tmp in _10Goals:
-			_10Goals[tmp].append(name)
-		else:
-			_10Goals[tmp] = [name]
+			if tmp in _10Goals:
+				_10Goals[tmp].append(name)
+			else:
+				_10Goals[tmp] = [name]
 
-		tmp = sum(data['assists']['last 3'])
+			tmp = sum(data['assists']['last 3'])
 
-		if tmp in _3Assists:
-			_3Assists[tmp].append(name)
-		else:
-			_3Assists[tmp] = [name]
+			if tmp in _3Assists:
+				_3Assists[tmp].append(name)
+			else:
+				_3Assists[tmp] = [name]
 
-		tmp = sum(data['assists']['last 5'])
+			tmp = sum(data['assists']['last 5'])
 
-		if tmp in _5Assists:
-			_5Assists[tmp].append(name)
-		else:
-			_5Assists[tmp] = [name]
+			if tmp in _5Assists:
+				_5Assists[tmp].append(name)
+			else:
+				_5Assists[tmp] = [name]
 
-		tmp = sum(data['assists']['last 10'])
+			tmp = sum(data['assists']['last 10'])
 
-		if tmp in _10Assists:
-			_10Assists[tmp].append(name)
-		else:
-			_10Assists[tmp] = [name]
+			if tmp in _10Assists:
+				_10Assists[tmp].append(name)
+			else:
+				_10Assists[tmp] = [name]
 
-		tmp = sum(data['points']['last 3'])
+			tmp = sum(data['points']['last 3'])
 
-		if tmp in _3Points:
-			_3Points[tmp].append(name)
-		else:
-			_3Points[tmp] = [name]
+			if tmp in _3Points:
+				_3Points[tmp].append(name)
+			else:
+				_3Points[tmp] = [name]
 
-		tmp = sum(data['points']['last 5'])
+			tmp = sum(data['points']['last 5'])
 
-		if tmp in _5Points:
-			_5Points[tmp].append(name)
-		else:
-			_5Points[tmp] = [name]
+			if tmp in _5Points:
+				_5Points[tmp].append(name)
+			else:
+				_5Points[tmp] = [name]
 
-		tmp = sum(data['points']['last 10'])
+			tmp = sum(data['points']['last 10'])
 
-		if tmp in _10Points:
-			_10Points[tmp].append(name)
-		else:
-			_10Points[tmp] = [name]
+			if tmp in _10Points:
+				_10Points[tmp].append(name)
+			else:
+				_10Points[tmp] = [name]
 
 
 	generateDailyReport(_3Goals, 3, 'goals')
