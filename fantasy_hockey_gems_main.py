@@ -38,6 +38,7 @@ def updateDatabase():
 
 		playerName = player['playerName']
 		gamesPlayedNew = player['gamesPlayed']
+		playerPositionCode = player['playerPositionCode']
 		goalsNew = player['goals']
 		assistsNew = player['assists']
 		pointsNew = player['points']
@@ -53,10 +54,10 @@ def updateDatabase():
 
 			# https://docs.python.org/3/library/json.html
 			# http://stackoverflow.com/questions/12309269/how-do-i-write-json-data-to-a-file-in-python
-			# b = json.dumps({'playerName':name, 'gamesPlayed':gamesPlayed, 'goals':{'last 3':[goals] + []}})
 			outputData = {	
 			"playerName": playerName,
 			"gamesPlayed" : gamesPlayedNew,
+			"playerPositionCode" : playerPositionCode,
 			"goals" : {"last 3": [goalsNew, 0, 0],
 						"last 5" : [goalsNew, 0, 0, 0, 0],
 						"last 10" : [goalsNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -162,8 +163,11 @@ def updateDatabase():
 		savePctgNew = goalie['savePctg']
 		winsNew = goalie['wins']
 		shutoutsNew = goalie['shutouts']
-		goalsAgainstAverageNew = goalie['goalsAgainstAverage']
 		shotsAgainstNew = goalie['shotsAgainst']
+		goalsAgainstNew = goalie['goalsAgainst']
+		timeOnIceNew = goalie['timeOnIce']
+
+
 
 
 	return
@@ -241,6 +245,8 @@ def sortDailyStats():
 		
 		with open("Player Stats/" + f) as playerFile:
 			data = json.load(playerFile)
+
+
 
 		name = data['playerName']
 
