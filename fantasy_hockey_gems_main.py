@@ -246,6 +246,12 @@ def updateDatabase():
 				playerStats['shotsAgainst']['last 10'] = [shotsOnGoalLastGame] + shotsAgainstOld['last 10'][:9]
 				playerStats['shotsAgainst']['total'] = shotsAgainstNew
 
+				tmp = timeOnIceNew - timeOnIceOld['total']
+				playerStats['timeOnIce']['last 3'] = [tmp] + timeOnIceOld['last 3'][:2]
+				playerStats['timeOnIce']['last 5'] = [tmp] + timeOnIceOld['last 5'][:4]
+				playerStats['timeOnIce']['last 10'] = [tmp] + timeOnIceOld['last 10'][:9]
+				playerStats['timeOnIce']['total'] = timeOnIceNew
+
 
 					
 	return
