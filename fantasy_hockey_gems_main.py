@@ -112,44 +112,40 @@ def updateDatabase():
 				assistsOld = playerStats['assists']
 				#dict
 				pointsOld = playerStats['points']
-				plusMinusOld = playerStats['plusMinus']
-				penaltyMinutesOld = playerStats['penaltyMinutes']
 				#dict
 				ppPointsOld = playerStats['ppPoints']
 				#dict
 				ppGoalsOld = playerStats['ppGoals']
-				shGoalsOld = playerStats['shGoals']
-				shotsOld = playerStats['shots']	
 
 				playerStats['gamesPlayed'] = gamesPlayedNew
 
-				tmp = goalsNew - playerStats['goals']['total']
-				playerStats['goals']['last 3'] = [tmp] + playerStats['goals']['last 3'][:2]
-				playerStats['goals']['last 5'] = [tmp] + playerStats['goals']['last 5'][:4]
-				playerStats['goals']['last 10'] = [tmp] + playerStats['goals']['last 10'][:9]
+				tmp = goalsNew - goalsOld['total']
+				playerStats['goals']['last 3'] = [tmp] + goalsOld['last 3'][:2]
+				playerStats['goals']['last 5'] = [tmp] + goalsOld['last 5'][:4]
+				playerStats['goals']['last 10'] = [tmp] + goalsOld['last 10'][:9]
 				playerStats['goals']['total'] = goalsNew
 
-				tmp = assistsNew - playerStats['assists']['total']
-				playerStats['assists']['last 3'] = [tmp] + playerStats['assists']['last 3'][:2]
-				playerStats['assists']['last 5'] = [tmp] + playerStats['assists']['last 5'][:4]
-				playerStats['assists']['last 10'] = [tmp] + playerStats['assists']['last 10'][:9]
+				tmp = assistsNew - assistsOld['total']
+				playerStats['assists']['last 3'] = [tmp] + assistsOld['last 3'][:2]
+				playerStats['assists']['last 5'] = [tmp] + assistsOld['last 5'][:4]
+				playerStats['assists']['last 10'] = [tmp] + assistsOld['last 10'][:9]
 				playerStats['assists']['total'] = assistsNew				
 
-				tmp = pointsNew - playerStats['points']['total']
-				playerStats['points']['last 3'] = [tmp] + playerStats['points']['last 3'][:2]
-				playerStats['points']['last 5'] = [tmp] + playerStats['points']['last 5'][:4]
-				playerStats['points']['last 10'] = [tmp] + playerStats['points']['last 10'][:9]
+				tmp = pointsNew - pointsOld['total']
+				playerStats['points']['last 3'] = [tmp] + pointsOld['last 3'][:2]
+				playerStats['points']['last 5'] = [tmp] + pointsOld['last 5'][:4]
+				playerStats['points']['last 10'] = [tmp] + pointsOld['last 10'][:9]
 				playerStats['points']['total'] = pointsNew
 
 				playerStats['plusMinus'] = plusMinusNew
 				playerStats['penaltyMinutes'] = penaltyMinutesNew
 
-				tmp = ppPointsNew - playerStats['ppPoints']['total']
-				playerStats['ppPoints']['last 5'] = [tmp] + playerStats['ppPoints']['last 5'][:4]
+				tmp = ppPointsNew - ppPointsOld['total']
+				playerStats['ppPoints']['last 5'] = [tmp] + ppPointsOld['last 5'][:4]
 				playerStats['ppPoints']['total'] = ppPointsNew
 
-				tmp = ppGoalsNew - playerStats['ppGoals']['total']
-				playerStats['ppGoals']['last 5'] = [tmp] + playerStats['ppGoals']['last 5'][:4]
+				tmp = ppGoalsNew - ppGoalsOld['total']
+				playerStats['ppGoals']['last 5'] = [tmp] + ppGoalsOld['last 5'][:4]
 				playerStats['ppGoals']['total'] = ppGoalsNew
 
 				playerStats['shGoals'] = shGoalsNew
@@ -164,7 +160,7 @@ def updateDatabase():
 	for goalie in goalieData:
 		playerName = goalie['playerName']
 		gamesPlayedNew = goalie['gamesPlayed']
-		playerPositionCode = player['playerPositionCode']
+		playerPositionCode = goalie['playerPositionCode']
 		savePctgNew = goalie['savePctg']
 		winsNew = goalie['wins']
 		shutoutsNew = goalie['shutouts']
@@ -217,6 +213,41 @@ def updateDatabase():
 
 			if (gamesPlayedOld == gamesPlayedNew):
 				pass
+
+			else:
+				savePctgOld = playerStats['savePctg']
+				winsOld = playerStats['wins']
+				shotsAgainstOld = playerStats['shotsAgainst']
+				goalsAgainstOld = playerStats['goalsAgainst']
+				timeOnIceOld = playerStats['timeOnIce']
+
+				# calculate the SV% of last game; stat in NHL JSON is a cumulative number
+				# the shotsAgainst stat counts both saves and goals
+				goalsAllowedLastGame = goalsAgainstNew - goalsAgainstOld
+				shotsOnGoalLastGame = shotsAgainstNew - shotsAgainstOld
+				savesLastGame = shotsSavedLastGame - goalsAllowedLastGame
+				tmp = savesLastGame / shotsOnGoalLastGame
+
+				playerStats['savePctg']['last 3'] = [tmp] + savePctgOld['last 3'][:2]
+				playerStats['savePctg']['last 5'] = [tmp] + savePctgOld['last 5'][:4]
+				playerStats['savePctg']['last 10'] = [tmp] + savePctgOld['last 10'][:9]
+				playerStats['savePctg']['total'] = savePctgNew
+
+				tmp = winsNew - winsOld['total']
+				playerStats['wins']['last 3'] = [tmp] + winsOld['last 3'][:2]
+				playerStats['wins']['last 5'] = [tmp] + winsOld['last 5'][:4]
+				playerStats['wins']['last 10'] = [tmp] + winsOld['last 10'][:9]
+				playerStats['wins']['total'] = winsNew
+
+				playerStats['shutouts'] = shutoutsNew
+
+				playerStats['shotsAgainst']['last 3'] = [shotsOnGoalLastGame] + shotsAgainstOld['last 3'][:2]
+				playerStats['shotsAgainst']['last 5'] = [shotsOnGoalLastGame] + shotsAgainstOld['last 5'][:4]
+				playerStats['shotsAgainst']['last 10'] = [shotsOnGoalLastGame] + shotsAgainstOld['last 10'][:9]
+				playerStats['shotsAgainst']['total'] = shotsAgainstNew
+
+
+					
 	return
 
 
