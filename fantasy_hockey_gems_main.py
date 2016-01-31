@@ -210,7 +210,7 @@ def updateDatabase():
 						"last 5" : [timeOnIceNew, 0, 0, 0, 0], 
 						"last 10" : [timeOnIceNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						"total" : timeOnIceNew
-						  },
+						  }
 			}
 			with open("Player Stats/" + playerName + ".json", "w") as outfile:
 				json.dump(outputData, outfile)						
