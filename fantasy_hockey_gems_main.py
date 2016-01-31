@@ -6,7 +6,7 @@ import os.path
 import urllib.request
 import datetime
 import json
-
+import statistics
 
 
 # updates and creates a database of individual player stats
@@ -185,8 +185,7 @@ def updateDatabase():
 						"last 10" : [winsNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						"total" : winsNew
 						},	
-			"shutouts" : {"total" : shutoutsNew
-						},
+			"shutouts" : shutoutsNew,
 			"shotsAgainst" : {"last 3" : [shotsAgainstNew, 0, 0],
 						"last 5" : [shotsAgainstNew, 0, 0, 0, 0],
 						"last 10" : [shotsAgainstNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -235,6 +234,8 @@ def updateDatabase():
 				timeOnIceOld = playerStats['timeOnIce']
 				goalsAgainstAverageOld = playerStats['goalsAgainstAverage']
 
+				playerStats['gamesPlayed'] = gamesPlayedNew
+
 				# calculate the SV% of last game; stat in NHL JSON is a cumulative number
 				# the shotsAgainst stat counts both saves and goals			
 				shotsOnGoalLastGame = shotsAgainstNew - shotsAgainstOld['total']
@@ -266,8 +267,8 @@ def updateDatabase():
 				playerStats['goalsAgainst']['total'] = goalsAgainstNew
 
 				playerStats['saves']['last 3'] = [savesLastGame] + savesOld['last 3'][:2]
-				playerStats['saves']['last 5'] = [savesLastGame] + savesOld['last 5'][:2]
-				playerStats['saves']['last 10'] = [savesLastGame] + savesOld['last 10'][:2]
+				playerStats['saves']['last 5'] = [savesLastGame] + savesOld['last 5'][:4]
+				playerStats['saves']['last 10'] = [savesLastGame] + savesOld['last 10'][:9]
 				playerStats['saves']['total'] = savesNew
 
 				timeOnIceLastGame = timeOnIceNew - timeOnIceOld['total']
@@ -278,10 +279,12 @@ def updateDatabase():
 
 				goalsAgainstAverageLastGame = goalsAgainstLastGame / timeOnIceLastGame * 60
 				playerStats['goalsAgainstAverage']['last 3'] = [goalsAgainstAverageLastGame] + goalsAgainstAverage['last 3'][:2]
-				playerStats['goalsAgainstAverage']['last 5'] = [goalsAgainstAverageLastGame] + goalsAgainstAverage['last 5'][:2]
-				playerStats['goalsAgainstAverage']['last 10'] = [goalsAgainstAverageLastGame] + goalsAgainstAverage['last 10'][:2]
+				playerStats['goalsAgainstAverage']['last 5'] = [goalsAgainstAverageLastGame] + goalsAgainstAverage['last 5'][:4]
+				playerStats['goalsAgainstAverage']['last 10'] = [goalsAgainstAverageLastGame] + goalsAgainstAverage['last 10'][:9]
 				playerStats['goalsAgainstAverage']['total'] = goalsAgainstAverageNew
 
+				with open("Player Stats/" + playerName + ".json", "w") as statsFile:
+					json.dump(playerStats, statsFile)
 					
 	return
 
@@ -341,6 +344,7 @@ def getDailyStats():
 def sortDailyStats():
 
 	#key will be sum of last 3, 5 or 10, values the list of players
+	#skater stats will be the sum
 	_3Goals = {}
 	_5Goals = {}
 	_10Goals = {}
@@ -351,6 +355,29 @@ def sortDailyStats():
 	_10Points = {}
 	_3Points = {}
 
+	#goalie stats will be average
+	_3SavePctg = {}
+	_5SavePctg = {}
+	_10SavePctg = {}
+	_3Wins = {}
+	_5Wins = {}
+	_10Wins = {}
+	_3ShotsAgainst = {}
+	_5ShotsAgainst = {}
+	_10ShotsAgainst = {}
+	_3GoalsAgainst = {}
+	_5GoalsAgainst = {}
+	_10GoalsAgainst = {}
+	_3Saves = {}
+	_5Saves = {}
+	_10Saves = {}
+	_3TimeOnIce = {}
+	_5TimeOnIce = {}
+	_10TimeOnIce = {}
+	_3GAA = {}
+	_5GAA = {}
+	_10GAA = {}
+
 	if not (os.path.isdir("Daily Reports")):
 		os.makedirs("Daily Reports")
 
@@ -360,8 +387,19 @@ def sortDailyStats():
 			data = json.load(playerFile)
 
 		if (data['playerPositionCode'] == 'G'):
-			#code for goalie reports here
-			pass
+
+			name = data['playerName']
+
+			tmp = statistics.mean(data['savePctg']['last 3'])
+
+			if tmp in _3SavePctg:
+				_3SavePctg[tmp].append(name)
+
+			else:
+				_3SavePctg[tmp] = [name]	
+
+			
+
 
 		else:	
 
@@ -471,4 +509,4 @@ def generateDailyReport(dictionary, lastXGames, stat):
 	return
 
 # updateDatabase()
-sortDailyStats()
+# sortDailyStats()
