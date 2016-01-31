@@ -167,6 +167,8 @@ def updateDatabase():
 		shotsAgainstNew = goalie['shotsAgainst']
 		goalsAgainstNew = goalie['goalsAgainst']
 		timeOnIceNew = goalie['timeOnIce']
+		savesNew = goalie['saves']
+		goalsAgainstAverageNew = goalie['goalsAgainstAverage']
 
 		if not os.path.isfile("Player Stats/" + playerName + ".json"):
 			outputData = {	
@@ -195,6 +197,16 @@ def updateDatabase():
 						"last 10" : [goalsAgainstNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						"total" : goalsAgainstNew
 						},
+			"saves" : {"last 3" : [savesNew, 0, 0],
+						"last 5" : [savesNew, 0, 0, 0, 0],
+						"last 10" : [savesNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"total" : savesNew
+						},
+			"goalsAgainstAverage" : {"last 3" : [goalsAgainstAverageNew, 0, 0],
+									"last 5" : [goalsAgainstAverageNew, 0, 0, 0, 0],
+									"last 10" : [goalsAgainstAverageNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+									"total" : goalsAgainstAverageNew
+						},
 			"timeOnIce" : {"last 3" : [timeOnIceNew, 0, 0],
 						"last 5" : [timeOnIceNew, 0, 0, 0, 0], 
 						"last 10" : [timeOnIceNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -219,13 +231,14 @@ def updateDatabase():
 				winsOld = playerStats['wins']
 				shotsAgainstOld = playerStats['shotsAgainst']
 				goalsAgainstOld = playerStats['goalsAgainst']
+				savesOld = playerStats['saves']
 				timeOnIceOld = playerStats['timeOnIce']
+				goalsAgainstAverageOld = playerStats['goalsAgainstAverage']
 
 				# calculate the SV% of last game; stat in NHL JSON is a cumulative number
-				# the shotsAgainst stat counts both saves and goals
-				goalsAllowedLastGame = goalsAgainstNew - goalsAgainstOld
-				shotsOnGoalLastGame = shotsAgainstNew - shotsAgainstOld
-				savesLastGame = shotsSavedLastGame - goalsAllowedLastGame
+				# the shotsAgainst stat counts both saves and goals			
+				shotsOnGoalLastGame = shotsAgainstNew - shotsAgainstOld['total']
+				savesLastGame = savesNew - savesOld['total']
 				tmp = savesLastGame / shotsOnGoalLastGame
 
 				playerStats['savePctg']['last 3'] = [tmp] + savePctgOld['last 3'][:2]
@@ -246,12 +259,28 @@ def updateDatabase():
 				playerStats['shotsAgainst']['last 10'] = [shotsOnGoalLastGame] + shotsAgainstOld['last 10'][:9]
 				playerStats['shotsAgainst']['total'] = shotsAgainstNew
 
-				tmp = timeOnIceNew - timeOnIceOld['total']
-				playerStats['timeOnIce']['last 3'] = [tmp] + timeOnIceOld['last 3'][:2]
-				playerStats['timeOnIce']['last 5'] = [tmp] + timeOnIceOld['last 5'][:4]
-				playerStats['timeOnIce']['last 10'] = [tmp] + timeOnIceOld['last 10'][:9]
+				goalsAgainstLastGame = goalsAgainstNew - goalsAgainstOld['total']
+				playerStats['goalsAgainst']['last 3'] = [goalsAgainstLastGame] + goalsAgainstOld['last 3'][:2]
+				playerStats['goalsAgainst']['last 5'] = [goalsAgainstLastGame] + goalsAgainstOld['last 5'][:4]
+				playerStats['goalsAgainst']['last 10'] = [goalsAgainstLastGame] + goalsAgainstOld['last 10'][:9]
+				playerStats['goalsAgainst']['total'] = goalsAgainstNew
+
+				playerStats['saves']['last 3'] = [savesLastGame] + savesOld['last 3'][:2]
+				playerStats['saves']['last 5'] = [savesLastGame] + savesOld['last 5'][:2]
+				playerStats['saves']['last 10'] = [savesLastGame] + savesOld['last 10'][:2]
+				playerStats['saves']['total'] = savesNew
+
+				timeOnIceLastGame = timeOnIceNew - timeOnIceOld['total']
+				playerStats['timeOnIce']['last 3'] = [timeOnIceLastGame] + timeOnIceOld['last 3'][:2]
+				playerStats['timeOnIce']['last 5'] = [timeOnIceLastGame] + timeOnIceOld['last 5'][:4]
+				playerStats['timeOnIce']['last 10'] = [timeOnIceLastGame] + timeOnIceOld['last 10'][:9]
 				playerStats['timeOnIce']['total'] = timeOnIceNew
 
+				goalsAgainstAverageLastGame = goalsAgainstLastGame / timeOnIceLastGame * 60
+				playerStats['goalsAgainstAverage']['last 3'] = [goalsAgainstAverageLastGame] + goalsAgainstAverage['last 3'][:2]
+				playerStats['goalsAgainstAverage']['last 5'] = [goalsAgainstAverageLastGame] + goalsAgainstAverage['last 5'][:2]
+				playerStats['goalsAgainstAverage']['last 10'] = [goalsAgainstAverageLastGame] + goalsAgainstAverage['last 10'][:2]
+				playerStats['goalsAgainstAverage']['total'] = goalsAgainstAverageNew
 
 					
 	return
