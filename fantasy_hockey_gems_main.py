@@ -359,21 +359,27 @@ def sortDailyStats():
 	_3SavePctg = {}
 	_5SavePctg = {}
 	_10SavePctg = {}
+
 	_3Wins = {}
 	_5Wins = {}
 	_10Wins = {}
+
 	_3ShotsAgainst = {}
 	_5ShotsAgainst = {}
 	_10ShotsAgainst = {}
+
 	_3GoalsAgainst = {}
 	_5GoalsAgainst = {}
 	_10GoalsAgainst = {}
+
 	_3Saves = {}
 	_5Saves = {}
 	_10Saves = {}
+
 	_3TimeOnIce = {}
 	_5TimeOnIce = {}
 	_10TimeOnIce = {}
+
 	_3GAA = {}
 	_5GAA = {}
 	_10GAA = {}
@@ -386,6 +392,7 @@ def sortDailyStats():
 		with open("Player Stats/" + f) as playerFile:
 			data = json.load(playerFile)
 
+
 		if (data['playerPositionCode'] == 'G'):
 
 			name = data['playerName']
@@ -396,10 +403,177 @@ def sortDailyStats():
 				_3SavePctg[tmp].append(name)
 
 			else:
-				_3SavePctg[tmp] = [name]	
+				_3SavePctg[tmp] = [name]
 
+			tmp = statistics.mean(data['savePctg']['last 5'])
 			
+			if tmp in _5SavePctg:
+				_5SavePctg[tmp].append(name)
 
+			else:
+				_5SavePctg[tmp] = [name]
+
+			tmp = statistics.mean(data['savePctg']['last 10'])		
+
+			if tmp in _10SavePctg:
+				_10SavePctg[tmp].append(name)
+
+			else:
+				_10SavePctg[tmp] = [name]
+
+
+			tmp = statistics.mean(data['wins']['last 3'])
+
+			if tmp in _3Wins:
+				_3Wins[tmp].append(name)
+
+			else:
+				_3Wins[tmp] = [name]
+
+			tmp = statistics.mean(data['wins']['last 5'])
+			
+			if tmp in _5Wins:
+				_5Wins[tmp].append(name)
+
+			else:
+				_5Wins[tmp] = [name]
+
+			tmp = statistics.mean(data['wins']['last 10'])		
+
+			if tmp in _10Wins:
+				_10Wins[tmp].append(name)
+
+			else:
+				_10Wins[tmp] = [name]
+
+
+			#shotsAgainst
+			tmp = statistics.mean(data['shotsAgainst']['last 3'])
+
+			if tmp in _3ShotsAgainst:
+				_3ShotsAgainst[tmp].append(name)
+
+			else:
+				_3ShotsAgainst[tmp] = [name]
+
+			tmp = statistics.mean(data['shotsAgainst']['last 5'])
+			
+			if tmp in _5ShotsAgainst:
+				_5ShotsAgainst[tmp].append(name)
+
+			else:
+				_5ShotsAgainst[tmp] = [name]
+
+			tmp = statistics.mean(data['shotsAgainst']['last 10'])		
+
+			if tmp in _10ShotsAgainst:
+				_10ShotsAgainst[tmp].append(name)
+
+			else:
+				_10ShotsAgainst[tmp] = [name]
+
+
+			#goalsAgainst
+			tmp = statistics.mean(data['goalsAgainst']['last 3'])
+
+			if tmp in _3GoalsAgainst:
+				_3GoalsAgainst[tmp].append(name)
+
+			else:
+				_3GoalsAgainst[tmp] = [name]
+
+			tmp = statistics.mean(data['goalsAgainst']['last 5'])
+			
+			if tmp in _5GoalsAgainst:
+				_5ShotsAgainst[tmp].append(name)
+
+			else:
+				_5ShotsAgainst[tmp] = [name]
+
+			tmp = statistics.mean(data['goalsAgainst']['last 10'])		
+
+			if tmp in _10GoalsAgainst:
+				_10GoalsAgainst[tmp].append(name)
+
+			else:
+				_10GoalsAgainst[tmp] = [name]
+
+			#saves
+			tmp = statistics.mean(data['saves']['last 3'])
+
+			if tmp in _3Saves:
+				_3Saves[tmp].append(name)
+
+			else:
+				_3Saves[tmp] = [name]
+
+			tmp = statistics.mean(data['saves']['last 5'])
+			
+			if tmp in _5Saves:
+				_5Saves[tmp].append(name)
+
+			else:
+				_5Saves[tmp] = [name]
+
+			tmp = statistics.mean(data['saves']['last 10'])		
+
+			if tmp in _10Saves:
+				_10Saves[tmp].append(name)
+
+			else:
+				_10Saves[tmp] = [name]													
+
+
+			#toi
+			tmp = statistics.mean(data['timeOnIce']['last 3'])
+
+			if tmp in _3TimeOnIce:
+				_3TimeOnIce[tmp].append(name)
+
+			else:
+				_3TimeOnIce[tmp] = [name]
+
+			tmp = statistics.mean(data['timeOnIce']['last 5'])
+			
+			if tmp in _5TimeOnIce:
+				_5TimeOnIce[tmp].append(name)
+
+			else:
+				_5TimeOnIce[tmp] = [name]
+
+			tmp = statistics.mean(data['timeOnIce']['last 10'])		
+
+			if tmp in _10TimeOnIce:
+				_10TimeOnIce[tmp].append(name)
+
+			else:
+				_10TimeOnIce[tmp] = [name]
+
+
+			#gaa	
+			tmp = statistics.mean(data['goalsAgainstAverage']['last 3'])
+
+			if tmp in _3GAA:
+				_3GAA[tmp].append(name)
+
+			else:
+				_3GAA[tmp] = [name]
+
+			tmp = statistics.mean(data['goalsAgainstAverage']['last 5'])
+			
+			if tmp in _5GAA:
+				_5GAA[tmp].append(name)
+
+			else:
+				_5GAA[tmp] = [name]
+
+			tmp = statistics.mean(data['goalsAgainstAverage']['last 10'])		
+
+			if tmp in _10GAA:
+				_10GAA[tmp].append(name)
+
+			else:
+				_10GAA[tmp] = [name]						
 
 		else:	
 
@@ -479,6 +653,36 @@ def sortDailyStats():
 	generateDailyReport(_5Points, 5, 'points')
 	generateDailyReport(_10Points, 10, 'points')
 
+	generateDailyReport(_3SavePctg, 3, 'savePctg')
+	generateDailyReport(_5SavePctg, 5, 'savePctg')
+	generateDailyReport(_10SavePctg, 10, 'savePctg')
+
+	generateDailyReport(_3Wins, 3, 'wins')
+	generateDailyReport(_5Wins, 5, 'wins')
+	generateDailyReport(_10Wins, 10, 'wins')
+
+
+	generateDailyReport(_3ShotsAgainst, 3, 'shotsAgainst')
+	generateDailyReport(_5ShotsAgainst, 5, 'shotsAgainst')
+	generateDailyReport(_10ShotsAgainst, 10, 'shotsAgainst')
+
+
+	generateDailyReport(_3GoalsAgainst, 3, 'goalsAgainst')
+	generateDailyReport(_5GoalsAgainst, 5, 'goalsAgainst')
+	generateDailyReport(_10GoalsAgainst, 10, 'goalsAgainst')	
+
+	generateDailyReport(_3Saves, 3, 'saves')
+	generateDailyReport(_5Saves, 5, 'saves')
+	generateDailyReport(_10Saves, 10, 'saves')		
+
+	generateDailyReport(_3TimeOnIce, 3, 'timeOnIce')
+	generateDailyReport(_5TimeOnIce, 5, 'timeOnIce')
+	generateDailyReport(_10TimeOnIce, 10, 'timeOnIce')
+
+	generateDailyReport(_3GAA, 3, 'goalsAgainstAverage')
+	generateDailyReport(_5GAA, 5, 'goalsAgainstAverage')
+	generateDailyReport(_10GAA, 10, 'goalsAgainstAverage')
+
 	return
 
 def generateDailyReport(dictionary, lastXGames, stat):
@@ -508,5 +712,5 @@ def generateDailyReport(dictionary, lastXGames, stat):
 
 	return
 
-# updateDatabase()
-# sortDailyStats()
+updateDatabase()
+sortDailyStats()
