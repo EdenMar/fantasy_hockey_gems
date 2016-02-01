@@ -1,6 +1,3 @@
-# Filename: PlayerClasses.py
-
-# from PlayerClasses import *
 
 import os.path
 import urllib.request
@@ -485,10 +482,10 @@ def sortDailyStats():
 			tmp = statistics.mean(data['goalsAgainst']['last 5'])
 			
 			if tmp in _5GoalsAgainst:
-				_5ShotsAgainst[tmp].append(name)
+				_5GoalsAgainst[tmp].append(name)
 
 			else:
-				_5ShotsAgainst[tmp] = [name]
+				_5GoalsAgainst[tmp] = [name]
 
 			tmp = statistics.mean(data['goalsAgainst']['last 10'])		
 
@@ -643,13 +640,13 @@ def sortDailyStats():
 				_10Points[tmp] = [name]
 
 
-	generateDailyReport(_3Goals, 3, 'goals')
-	generateDailyReport(_5Goals, 5, 'goals')
+	# generateDailyReport(_3Goals, 3, 'goals')
+	# generateDailyReport(_5Goals, 5, 'goals')
 	generateDailyReport(_10Goals, 10, 'goals')
-	generateDailyReport(_3Assists, 3, 'assists')
-	generateDailyReport(_5Assists, 5, 'assists')
+	# generateDailyReport(_3Assists, 3, 'assists')
+	# generateDailyReport(_5Assists, 5, 'assists')
 	generateDailyReport(_10Assists, 10, 'assists')
-	generateDailyReport(_3Points, 3, 'points')
+	# generateDailyReport(_3Points, 3, 'points')
 	generateDailyReport(_5Points, 5, 'points')
 	generateDailyReport(_10Points, 10, 'points')
 
@@ -688,15 +685,24 @@ def sortDailyStats():
 def generateDailyReport(dictionary, lastXGames, stat):
 
 	keys = list(dictionary.keys())
-	keys.sort(reverse=True)
+	if (stat == 'savePctg') or (stat == 'wins') or (stat == 'shotsAgainst') or (stat == 'goalsAgainst') or (stat == 'saves') or (stat == 'timeOnIce') or (stat == 'goalsAgainstAverage'):
+		keys.sort()
+	else:
+		keys.sort(reverse=True)
 	n = "Name"
 	t = "Total"
+	a = "Average"
 
 	today = datetime.date.today().isoformat()
 	fileName = today + " Last " + str(lastXGames) + " " + stat
 
 	outfile = open("Daily Reports/" + fileName, "w")
-	outfile.write(n.ljust(30) + t.center(5) + "Last %d Games\n".rjust(30) %lastXGames)
+
+	if (stat == 'savePctg') or (stat == 'wins') or (stat == 'shotsAgainst') or (stat == 'goalsAgainst') or (stat == 'saves') or (stat == 'timeOnIce') or (stat == 'goalsAgainstAverage'):
+		outfile.write(n.ljust(30) + a.center(5) + "Last %d Games".center(50) %lastXGames + "\n")
+
+	else:
+		outfile.write(n.ljust(30) + t.center(5) + "Last %d Games".center(40) %lastXGames + "\n")
 
 	for key in keys:
 		for name in dictionary[key]:
@@ -705,12 +711,17 @@ def generateDailyReport(dictionary, lastXGames, stat):
 				data = json.load(f)
 
 			lastNGames = str(data[stat]['last ' + str(lastXGames)])
+			position = data['playerPositionCode']
 
-			outfile.write(name.ljust(30) + str(key).center(5) + lastNGames.strip("[]").rjust(30) + "\n")
+			if (position == "G"):
+				outfile.write(name.ljust(30) + "{:5.4f}".format(key).center(5) + lastNGames.strip("[]").center(50) + "\n")
+
+			else:
+				outfile.write(name.ljust(30) + str(key).center(5) + lastNGames.strip("[]").center(40) + "\n")
 
 	outfile.close()
 
 	return
 
-updateDatabase()
+# updateDatabase()
 sortDailyStats()
