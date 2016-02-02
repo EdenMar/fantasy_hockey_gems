@@ -1,6 +1,6 @@
 # Fantasy Hockey Gems
 
-This is a little Python script designed to help organize and view hockey stats so users can hopefully find some hidden gems for their fantasy hockey pool. I haven't had a chance to do any programming in a while, and since I've fallen behind in all my pools, I decided to make something that would give me an edge when looking for additions to my teams. 
+This is a Python script designed to help organize and view hockey stats so users can hopefully find some hidden gems for their fantasy hockey pool. I haven't had a chance to do any programming in a while, so I decided to make something that would give me an edge when looking for additions to my teams. 
 
 # About
 
@@ -15,6 +15,11 @@ I wrote the script using Python 3.4, but by replacing the statistics module with
 * Goals
 * Assists
 * Points
+* Plus/Minus
+* Penalty Minutes
+* Powerplay Points
+* Powerplay Goals
+* Shots
 * Save Percentage
 * Wins
 * Shots Against
@@ -25,9 +30,9 @@ I wrote the script using Python 3.4, but by replacing the statistics module with
 
 # Future Features
 
-I'd like to throw in some testing sometime in the near future. I'd also like to do something with shutouts, but since that stat doesn't pop up consistently, I didn't feel like it was worth it to track too much.
+I'd like to throw in some test cases sometime in the near future. I'd also like to do something with shutouts and shorthanded goals, but since those stats don't pop up consistently, I didn't feel like it was worth it to track too much. Because I'm working full time and didn't have too strong of an idea of what I wanted out of this when I started, a lot of the code is similar. I'd love to refactor and pull out classes and more helper functions instead of these monstrosities.
 
 # Legal Stuff
 
-I'm a big fan of the NHL, so I'd like to formally recognize that all NHL stats, logo, players, copyright, trademark etc etc are their own. I'm not trying to make any money off their name by selling this or anything, I'm just doing this for fun and programming practice. I'm also licensing this under Apache License, version 2.0 so I'm releasing this "as is", without warranties or conditions.
+I'm a big fan of the NHL, so I'd like to formally recognize that all NHL stats, logo, players, copyright, trademark etc etc are their own. I'm not trying to make any money off their name by selling this or anything, I'm just doing this for fun and programming practice. That said, this is also my own work, so I'm also licensing this under Apache License, version 2.0 "as is", without warranties or conditions.
 

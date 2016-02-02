@@ -76,7 +76,7 @@ def updateDatabase():
 						},
 			"plusMinus" : {"last 3" : [plusMinusNew, 0, 0],
 							"last 5" : [plusMinusNew, 0, 0, 0, 0],
-							"last 10" : [plusMinusNew, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+							"last 10" : [plusMinusNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						"total" : plusMinusNew
 						},
 			"penaltyMinutes" : {"last 3" : [penaltyMinutesNew, 0, 0],
@@ -84,15 +84,23 @@ def updateDatabase():
 								"last 10" : [penaltyMinutesNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 								"total" :penaltyMinutesNew
 								}, 
-			"ppPoints" : {"last 5" : [ppPointsNew, 0, 0, 0, 0], 
+			"ppPoints" : {"last 3" : [ppPointsNew, 0, 0],
+						"last 5" : [ppPointsNew, 0, 0, 0, 0], 
+						"last 10" : [ppPointsNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						  "total" : ppPointsNew
 						  },
-			"ppGoals" : {"last 5" : [ppGoalsNew, 0, 0, 0, 0],
+			"ppGoals" : {"last 3" : [ppGoalsNew, 0, 0],
+						"last 5" : [ppGoalsNew, 0, 0, 0, 0],
+						"last 10" : [ppGoalsNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						"total": ppGoalsNew
 						},
 			"shGoals" : {"total" : shGoalsNew
 						},			
-			"shots" : shotsNew
+			"shots" : {"last 3" : [shotsNew, 0, 0],
+					"last 5" : [shotsNew, 0, 0, 0, 0],
+					"last 10" : [shotsNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					"total" : shotsNew
+					}
 			}
 			with open("Player Stats/" + playerName + ".json", "w") as outfile:
 				json.dump(outputData, outfile)
@@ -124,6 +132,7 @@ def updateDatabase():
 				ppGoalsOld = playerStats['ppGoals']
 				plusMinusOld = playerStats['plusMinus']
 				penaltyMinutesOld = playerStats['penaltyMinutes']
+				shotsOld = playerStats['shots']
 
 				playerStats['gamesPlayed'] = gamesPlayedNew
 
@@ -160,15 +169,24 @@ def updateDatabase():
 
 
 				tmp = ppPointsNew - ppPointsOld['total']
+				playerStats['ppPoints']['last 3'] = [tmp] + ppPointsOld['last 3'][:2]
 				playerStats['ppPoints']['last 5'] = [tmp] + ppPointsOld['last 5'][:4]
+				playerStats['ppPoints']['last 10'] = [tmp] + ppPointsOld['last 10'][:9]
 				playerStats['ppPoints']['total'] = ppPointsNew
 
 				tmp = ppGoalsNew - ppGoalsOld['total']
+				playerStats['ppPoints']['last 3'] = [tmp] + ppGoalsOld['last 3'][:2]
 				playerStats['ppGoals']['last 5'] = [tmp] + ppGoalsOld['last 5'][:4]
+				playerStats['ppGoals']['last 10'] = [tmp] + ppGoalsOld['last 10'][:9]
 				playerStats['ppGoals']['total'] = ppGoalsNew
 
 				playerStats['shGoals'] = shGoalsNew
-				playerStats['shots'] = shotsNew
+
+				tmp = shotsNew - shotsOld['total']
+				playerStats['shots']['last 3'] = [tmp] + shotsOld['last 3'][:2]
+				playerStats['shots']['last 5'] = [tmp] + shotsOld['last 5'][:4]
+				playerStats['shots']['last 10'] = [tmp] + shotsOld['last 10'][:9]
+				playerStats['shots']['total'] = shotsNew				
 
 				#rewrite the json file for the player
 				with open("Player Stats/" + playerName + ".json", "w") as statsFile:
@@ -373,7 +391,22 @@ def sortDailyStats():
 	_5Points = {}
 	_10Points = {}
 	_3Points = {}
-
+	_3PlusMinus = {}
+	_5PlusMinus = {}
+	_10PlusMinus = {}
+	_3PIMS = {}
+	_5PIMS = {}
+	_10PIMS = {}	
+	_3ppGoals = {}
+	_5ppGoals = {}
+	_10ppGoals = {}
+	_3ppPoints = {}
+	_5ppPoints = {}
+	_10ppPoints = {}
+	_3shots = {}
+	_5shots = {}
+	_10shots = {}
+	
 	#goalie stats will be average
 	_3SavePctg = {}
 	_5SavePctg = {}
@@ -660,6 +693,28 @@ def sortDailyStats():
 				_10Points[tmp].append(name)
 			else:
 				_10Points[tmp] = [name]
+
+
+			tmp = sum(data['plusMinus']['last 3'])
+
+			if tmp in _3PlusMinus:
+				_3PlusMinus[tmp].append(name)
+			else:
+				_3PlusMinus[tmp] = [name]
+
+			tmp = sum(data['points']['last 5'])
+
+			if tmp in _5Points:
+				_5Points[tmp].append(name)
+			else:
+				_5Points[tmp] = [name]
+
+			tmp = sum(data['points']['last 10'])
+
+			if tmp in _10Points:
+				_10Points[tmp].append(name)
+			else:
+				_10Points[tmp] = [name]				
 
 
 	generateDailySkaterReport(_3Goals, 3, 'goals')
