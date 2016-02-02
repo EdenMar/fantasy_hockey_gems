@@ -640,69 +640,63 @@ def sortDailyStats():
 				_10Points[tmp] = [name]
 
 
-	# generateDailyReport(_3Goals, 3, 'goals')
-	# generateDailyReport(_5Goals, 5, 'goals')
-	generateDailyReport(_10Goals, 10, 'goals')
-	# generateDailyReport(_3Assists, 3, 'assists')
-	# generateDailyReport(_5Assists, 5, 'assists')
-	generateDailyReport(_10Assists, 10, 'assists')
-	# generateDailyReport(_3Points, 3, 'points')
-	generateDailyReport(_5Points, 5, 'points')
-	generateDailyReport(_10Points, 10, 'points')
+	generateDailySkaterReport(_3Goals, 3, 'goals')
+	generateDailySkaterReport(_5Goals, 5, 'goals')
+	generateDailySkaterReport(_10Goals, 10, 'goals')
+	generateDailySkaterReport(_3Assists, 3, 'assists')
+	generateDailySkaterReport(_5Assists, 5, 'assists')
+	generateDailySkaterReport(_10Assists, 10, 'assists')
+	generateDailySkaterReport(_3Points, 3, 'points')
+	generateDailySkaterReport(_5Points, 5, 'points')
+	generateDailySkaterReport(_10Points, 10, 'points')
 
-	generateDailyReport(_3SavePctg, 3, 'savePctg')
-	generateDailyReport(_5SavePctg, 5, 'savePctg')
-	generateDailyReport(_10SavePctg, 10, 'savePctg')
+	# generateDailyReport(_3SavePctg, 3, 'savePctg')
+	# generateDailyReport(_5SavePctg, 5, 'savePctg')
+	# generateDailyReport(_10SavePctg, 10, 'savePctg')
 
-	generateDailyReport(_3Wins, 3, 'wins')
-	generateDailyReport(_5Wins, 5, 'wins')
-	generateDailyReport(_10Wins, 10, 'wins')
-
-
-	generateDailyReport(_3ShotsAgainst, 3, 'shotsAgainst')
-	generateDailyReport(_5ShotsAgainst, 5, 'shotsAgainst')
-	generateDailyReport(_10ShotsAgainst, 10, 'shotsAgainst')
+	# generateDailyReport(_3Wins, 3, 'wins')
+	# generateDailyReport(_5Wins, 5, 'wins')
+	# generateDailyReport(_10Wins, 10, 'wins')
 
 
-	generateDailyReport(_3GoalsAgainst, 3, 'goalsAgainst')
-	generateDailyReport(_5GoalsAgainst, 5, 'goalsAgainst')
-	generateDailyReport(_10GoalsAgainst, 10, 'goalsAgainst')	
+	# generateDailyReport(_3ShotsAgainst, 3, 'shotsAgainst')
+	# generateDailyReport(_5ShotsAgainst, 5, 'shotsAgainst')
+	# generateDailyReport(_10ShotsAgainst, 10, 'shotsAgainst')
 
-	generateDailyReport(_3Saves, 3, 'saves')
-	generateDailyReport(_5Saves, 5, 'saves')
-	generateDailyReport(_10Saves, 10, 'saves')		
 
-	generateDailyReport(_3TimeOnIce, 3, 'timeOnIce')
-	generateDailyReport(_5TimeOnIce, 5, 'timeOnIce')
-	generateDailyReport(_10TimeOnIce, 10, 'timeOnIce')
+	# generateDailyReport(_3GoalsAgainst, 3, 'goalsAgainst')
+	# generateDailyReport(_5GoalsAgainst, 5, 'goalsAgainst')
+	# generateDailyReport(_10GoalsAgainst, 10, 'goalsAgainst')	
 
-	generateDailyReport(_3GAA, 3, 'goalsAgainstAverage')
-	generateDailyReport(_5GAA, 5, 'goalsAgainstAverage')
-	generateDailyReport(_10GAA, 10, 'goalsAgainstAverage')
+	# generateDailyReport(_3Saves, 3, 'saves')
+	# generateDailyReport(_5Saves, 5, 'saves')
+	# generateDailyReport(_10Saves, 10, 'saves')		
+
+	# generateDailyReport(_3TimeOnIce, 3, 'timeOnIce')
+	# generateDailyReport(_5TimeOnIce, 5, 'timeOnIce')
+	# generateDailyReport(_10TimeOnIce, 10, 'timeOnIce')
+
+	# generateDailyReport(_3GAA, 3, 'goalsAgainstAverage')
+	# generateDailyReport(_5GAA, 5, 'goalsAgainstAverage')
+	# generateDailyReport(_10GAA, 10, 'goalsAgainstAverage')
 
 	return
 
-def generateDailyReport(dictionary, lastXGames, stat):
+def generateDailySkaterReport(dictionary, lastXGames, stat):
 
 	keys = list(dictionary.keys())
-	if (stat == 'savePctg') or (stat == 'wins') or (stat == 'shotsAgainst') or (stat == 'goalsAgainst') or (stat == 'saves') or (stat == 'timeOnIce') or (stat == 'goalsAgainstAverage'):
-		keys.sort()
-	else:
-		keys.sort(reverse=True)
+
+	keys.sort(reverse=True)
+
 	n = "Name"
 	t = "Total"
-	a = "Average"
 
 	today = datetime.date.today().isoformat()
 	fileName = today + " Last " + str(lastXGames) + " " + stat
 
 	outfile = open("Daily Reports/" + fileName, "w")
 
-	if (stat == 'savePctg') or (stat == 'wins') or (stat == 'shotsAgainst') or (stat == 'goalsAgainst') or (stat == 'saves') or (stat == 'timeOnIce') or (stat == 'goalsAgainstAverage'):
-		outfile.write(n.ljust(30) + a.center(5) + "Last %d Games".center(50) %lastXGames + "\n")
-
-	else:
-		outfile.write(n.ljust(30) + t.center(5) + "Last %d Games".center(40) %lastXGames + "\n")
+	outfile.write(n.ljust(30) + t.center(5) + "Last %d Games".center(50) %lastXGames + "\n")
 
 	for key in keys:
 		for name in dictionary[key]:
@@ -711,13 +705,8 @@ def generateDailyReport(dictionary, lastXGames, stat):
 				data = json.load(f)
 
 			lastNGames = str(data[stat]['last ' + str(lastXGames)])
-			position = data['playerPositionCode']
 
-			if (position == "G"):
-				outfile.write(name.ljust(30) + "{:5.4f}".format(key).center(5) + lastNGames.strip("[]").center(50) + "\n")
-
-			else:
-				outfile.write(name.ljust(30) + str(key).center(5) + lastNGames.strip("[]").center(40) + "\n")
+			outfile.write(name.ljust(30) + str(key).center(5) + lastNGames.strip("[]").center(50) + "\n")
 
 	outfile.close()
 
