@@ -4,6 +4,7 @@ import urllib.request
 import datetime
 import json
 import statistics
+import csv
 
 
 # updates and creates a database of individual player stats
@@ -694,21 +695,26 @@ def generateDailySkaterReport(dictionary, lastXGames, stat):
 	today = datetime.date.today().isoformat()
 	fileName = today + " Last " + str(lastXGames) + " " + stat
 
-	outfile = open("Daily Reports/" + fileName, "w")
+	# outfile = open("Daily Reports/" + fileName, "w")
+	last = "Last " + str(lastXGames) + " Games"
+	header = [n, t, last]
+	with open("Daily Reports/" + fileName + ".csv", "w", newline='') as outfile:
+		w = csv.writer(outfile)
 
-	outfile.write(n.ljust(30) + t.center(5) + "Last %d Games".center(50) %lastXGames + "\n")
+		w.writerow(header)
 
-	for key in keys:
-		for name in dictionary[key]:
+		for key in keys:
+			for name in dictionary[key]:
 
-			with open("Player Stats/" + name + ".json") as f:
-				data = json.load(f)
+				with open("Player Stats/" + name + ".json") as f:
+					data = json.load(f)
 
-			lastNGames = str(data[stat]['last ' + str(lastXGames)])
+				lastNGames = str(data[stat]['last ' + str(lastXGames)])
+				iterable = [name, key, lastNGames.strip("[]")]
 
-			outfile.write(name.ljust(30) + str(key).center(5) + lastNGames.strip("[]").center(50) + "\n")
+				w.writerow(iterable)
 
-	outfile.close()
+
 
 	return
 
