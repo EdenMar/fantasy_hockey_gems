@@ -702,19 +702,110 @@ def sortDailyStats():
 			else:
 				_3PlusMinus[tmp] = [name]
 
-			tmp = sum(data['points']['last 5'])
+			tmp = sum(data['plusMinus']['last 5'])
 
-			if tmp in _5Points:
-				_5Points[tmp].append(name)
+			if tmp in _5PlusMinus:
+				_5PlusMinus[tmp].append(name)
 			else:
-				_5Points[tmp] = [name]
+				_5PlusMinus[tmp] = [name]
 
-			tmp = sum(data['points']['last 10'])
+			tmp = sum(data['plusMinus']['last 10'])
 
-			if tmp in _10Points:
-				_10Points[tmp].append(name)
+			if tmp in _10PlusMinus:
+				_10PlusMinus[tmp].append(name)
 			else:
-				_10Points[tmp] = [name]				
+				_10PlusMinus[tmp] = [name]
+
+
+
+			tmp = sum(data['penaltyMinutes']['last 3'])
+
+			if tmp in _3PIMS:
+				_3PIMS[tmp].append(name)
+			else:
+				_3PIMS[tmp] = [name]
+
+			tmp = sum(data['penaltyMinutes']['last 5'])
+
+			if tmp in _5PIMS:
+				_5PIMS[tmp].append(name)
+			else:
+				_5PIMS[tmp] = [name]
+
+			tmp = sum(data['penaltyMinutes']['last 10'])
+
+			if tmp in _10PIMS:
+				_10PIMS[tmp].append(name)
+			else:
+				_10PIMS[tmp] = [name]
+
+
+			tmp = sum(data['ppGoals']['last 3'])
+
+			if tmp in _3ppGoals:
+				_3ppGoals[tmp].append(name)
+			else:
+				_3ppGoals[tmp] = [name]
+
+			tmp = sum(data['ppGoals']['last 5'])
+
+			if tmp in _5ppGoals:
+				_5ppGoals[tmp].append(name)
+			else:
+				_5ppGoals[tmp] = [name]
+
+			tmp = sum(data['ppGoals']['last 10'])
+
+			if tmp in _10ppGoals:
+				_10ppGoals[tmp].append(name)
+			else:
+				_10ppGoals[tmp] = [name]
+
+
+
+
+			tmp = sum(data['ppPoints']['last 3'])
+
+			if tmp in _3ppPoints:
+				_3ppPoints[tmp].append(name)
+			else:
+				_3ppPoints[tmp] = [name]
+
+			tmp = sum(data['ppPoints']['last 5'])
+
+			if tmp in _5ppPoints:
+				_5ppPoints[tmp].append(name)
+			else:
+				_5ppPoints[tmp] = [name]
+
+			tmp = sum(data['ppPoints']['last 10'])
+
+			if tmp in _10ppPoints:
+				_10ppPoints[tmp].append(name)
+			else:
+				_10ppPoints[tmp] = [name]
+
+
+			tmp = sum(data['shots']['last 3'])
+
+			if tmp in _3shots:
+				_3shots[tmp].append(name)
+			else:
+				_3shots[tmp] = [name]
+
+			tmp = sum(data['shots']['last 5'])
+
+			if tmp in _5shots:
+				_5shots[tmp].append(name)
+			else:
+				_5shots[tmp] = [name]
+
+			tmp = sum(data['shots']['last 10'])
+
+			if tmp in _10shots:
+				_10shots[tmp].append(name)
+			else:
+				_10shots[tmp] = [name]				
 
 
 	generateDailySkaterReport(_3Goals, 3, 'goals')
@@ -726,6 +817,27 @@ def sortDailyStats():
 	generateDailySkaterReport(_3Points, 3, 'points')
 	generateDailySkaterReport(_5Points, 5, 'points')
 	generateDailySkaterReport(_10Points, 10, 'points')
+
+	generateDailySkaterReport(_3PlusMinus, 3, 'plusMinus')
+	generateDailySkaterReport(_5PlusMinus, 5, 'plusMinus')
+	generateDailySkaterReport(_10PlusMinus, 10, 'plusMinus')
+
+	generateDailySkaterReport(_3PIMS, 3, 'penaltyMinutes')
+	generateDailySkaterReport(_5PIMS, 5, 'penaltyMinutes')
+	generateDailySkaterReport(_10PIMS, 10, 'penaltyMinutes')
+
+	generateDailySkaterReport(_3ppPoints, 3, 'ppPoints')
+	generateDailySkaterReport(_5ppPoints, 5, 'ppPoints')
+	generateDailySkaterReport(_10ppPoints, 10, 'ppPoints')
+
+	generateDailySkaterReport(_3ppGoals, 3, 'ppGoals')
+	generateDailySkaterReport(_5ppGoals, 5, 'ppGoals')
+	generateDailySkaterReport(_10ppGoals, 10, 'ppGoals')
+
+	generateDailySkaterReport(_3shots, 3, 'shots')
+	generateDailySkaterReport(_5shots, 5, 'shots')
+	generateDailySkaterReport(_10shots, 10, 'shots')				
+
 
 	generateDailyGoalieReport(_3SavePctg, 3, 'savePctg')
 	generateDailyGoalieReport(_5SavePctg, 5, 'savePctg')
@@ -770,14 +882,14 @@ def generateDailySkaterReport(dictionary, lastXGames, stat):
 
 	today = datetime.date.today().isoformat()
 
-	if not (os.path.isdir("Daily Reports/" + today)):
-		os.makedirs("Daily Reports/" + today)	
+	if not (os.path.isdir("Daily Reports/" + today + "/" + "Skater Stats")):
+		os.makedirs("Daily Reports/" + today + "/" + "Skater Stats")	
 
 	fileName = today + " Last " + str(lastXGames) + " " + stat
 
 	last = "Last " + str(lastXGames) + " Games"
 	header = [n, t, last]
-	with open("Daily Reports/" + today + "/" + fileName + ".csv", "w", newline='') as outfile:
+	with open("Daily Reports/" + today + "/" + "Skater Stats" + "/" + fileName + ".csv", "w", newline='') as outfile:
 		w = csv.writer(outfile)
 
 		w.writerow(header)
@@ -808,8 +920,8 @@ def generateDailyGoalieReport(dictionary, lastXGames, stat):
 
 	today = datetime.date.today().isoformat()
 
-	if not (os.path.isdir("Daily Reports/" + today)):
-		os.makedirs("Daily Reports/" + today)
+	if not (os.path.isdir("Daily Reports/" + today + "/" + "Goalie Stats")):
+		os.makedirs("Daily Reports/" + today + "/" + "Goalie Stats")
 
 
 	fileName = today + " Last " + str(lastXGames) + " " + stat
@@ -818,7 +930,7 @@ def generateDailyGoalieReport(dictionary, lastXGames, stat):
 
 	header = ['Name', 'Season Total', 'Avg Over ' + str(lastXGames) + ' Games' , last]
 
-	with open("Daily Reports/" + today + "/" + fileName + ".csv", "w", newline='') as outfile:
+	with open("Daily Reports/" + today + "/" + "Goalie Stats" + "/" + fileName + ".csv", "w", newline='') as outfile:
 		w = csv.writer(outfile)
 
 		w.writerow(header)
@@ -833,10 +945,6 @@ def generateDailyGoalieReport(dictionary, lastXGames, stat):
 				iterable = [name, data[stat]['total'], key, lastNGames.strip("[]")]
 
 				w.writerow(iterable)	
-
-
-
-
 
 
 

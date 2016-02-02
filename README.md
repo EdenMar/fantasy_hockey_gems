@@ -30,7 +30,7 @@ I wrote the script using Python 3.4, but by replacing the statistics module with
 
 # Future Features
 
-I'd like to throw in some test cases sometime in the near future. I'd also like to do something with shutouts and shorthanded goals, but since those stats don't pop up consistently, I didn't feel like it was worth it to track too much. Because I'm working full time and didn't have too strong of an idea of what I wanted out of this when I started, a lot of the code is similar. I'd love to refactor and pull out classes and more helper functions instead of these monstrosities.
+I'm still working on this project right now, so I'd like to add some test cases sometime in the near future. I'd also like to do something with shutouts and shorthanded goals, but since those stats don't pop up consistently, I didn't feel like it was worth it to track too much. Because I'm working full time and didn't have too strong of an idea of what I wanted out of this when I started, a lot of the code is similar. I'd love to refactor and pull out classes and more helper functions instead of these monstrosities.
 
 # Legal Stuff
 
