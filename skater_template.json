@@ -22,22 +22,38 @@
 				"total" : 12
 				},
 
-	"plusMinus" : 12,
-
-	"penaltyMinutes" : 50, 
-
-	"ppPoints" : {"last 5" : 10, 
-				  "total" : 100
-				  },
-
-	"ppGoals" : {"last 5" : 5,
-				"total": 50
+	"plusMinus" : {"last 3" : [0, 0, 0],
+				"last 5" : [3, 2, 1, 4, 5],
+				"last 10" : [3, 2, 1, 4, 5, 6, 7, 8, 9, 0],
+				"total" : 90
 				},
+
+	"penaltyMinutes" : {"last 3" : [0, 0, 0],
+				"last 5" : [3, 2, 1, 4, 5],
+				"last 10" : [3, 2, 1, 4, 5, 6, 7, 8, 9, 0],
+				"total" : 12
+				}, 
+
+	"ppPoints" : {"last 3" : [0, 0, 0],
+				"last 5" : [3, 2, 1, 4, 5],
+				"last 10" : [3, 2, 1, 4, 5, 6, 7, 8, 9, 0],
+				"total" : 12
+				}, 
+
+	"ppGoals" : {"last 3" : [0, 0, 0],
+				"last 5" : [3, 2, 1, 4, 5],
+				"last 10" : [3, 2, 1, 4, 5, 6, 7, 8, 9, 0],
+				"total" : 12
+				}, 
 
 	"shGoals" : {"total" : 1
 				},			
 
-	"shots" : 200
+	"shots" : {"last 3" : [0, 0, 0],
+				"last 5" : [3, 2, 1, 4, 5],
+				"last 10" : [3, 2, 1, 4, 5, 6, 7, 8, 9, 0],
+				"total" : 12
+				}, 
 
 
 }
