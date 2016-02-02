@@ -74,8 +74,16 @@ def updateDatabase():
 						"last 10" : [pointsNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						"total" : pointsNew
 						},
-			"plusMinus" : plusMinusNew,
-			"penaltyMinutes" : penaltyMinutesNew, 
+			"plusMinus" : {"last 3" : [plusMinusNew, 0, 0],
+							"last 5" : [plusMinusNew, 0, 0, 0, 0],
+							"last 10" : [plusMinusNew, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+						"total" : plusMinusNew
+						},
+			"penaltyMinutes" : {"last 3" : [penaltyMinutesNew, 0, 0],
+								"last 5" : [penaltyMinutesNew, 0, 0, 0, 0],
+								"last 10" : [penaltyMinutesNew, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+								"total" :penaltyMinutesNew
+								}, 
 			"ppPoints" : {"last 5" : [ppPointsNew, 0, 0, 0, 0], 
 						  "total" : ppPointsNew
 						  },
@@ -114,6 +122,8 @@ def updateDatabase():
 				ppPointsOld = playerStats['ppPoints']
 				#dict
 				ppGoalsOld = playerStats['ppGoals']
+				plusMinusOld = playerStats['plusMinus']
+				penaltyMinutesOld = playerStats['penaltyMinutes']
 
 				playerStats['gamesPlayed'] = gamesPlayedNew
 
@@ -135,8 +145,19 @@ def updateDatabase():
 				playerStats['points']['last 10'] = [tmp] + pointsOld['last 10'][:9]
 				playerStats['points']['total'] = pointsNew
 
-				playerStats['plusMinus'] = plusMinusNew
-				playerStats['penaltyMinutes'] = penaltyMinutesNew
+				tmp = plusMinusNew - plusMinusOld['total']
+				playerStats['plusMinus']['last 3'] = [tmp] + plusMinusOld['last 3'][:2]
+				playerStats['plusMinus']['last 5'] = [tmp] + plusMinusOld['last 5'][:4]
+				playerStats['plusMinus']['last 10'] = [tmp] + plusMinusOld['last 10'][:9]
+				playerStats['plusMinus']['total'] = plusMinusNew				
+
+
+				tmp = penaltyMinutesNew - penaltyMinutesOld['total']
+				playerStats['penaltyMinutes']['last 3'] = [tmp] + penaltyMinutesOld['last 3'][:2]
+				playerStats['penaltyMinutes']['last 5'] = [tmp] + penaltyMinutesOld['last 5'][:4]
+				playerStats['penaltyMinutes']['last 10'] = [tmp] + penaltyMinutes['last 10'][:9]
+				playerStats['penaltyMinutes']['total'] = penaltyMinutesNew			
+
 
 				tmp = ppPointsNew - ppPointsOld['total']
 				playerStats['ppPoints']['last 5'] = [tmp] + ppPointsOld['last 5'][:4]
