@@ -651,35 +651,35 @@ def sortDailyStats():
 	generateDailySkaterReport(_5Points, 5, 'points')
 	generateDailySkaterReport(_10Points, 10, 'points')
 
-	# generateDailyReport(_3SavePctg, 3, 'savePctg')
-	# generateDailyReport(_5SavePctg, 5, 'savePctg')
-	# generateDailyReport(_10SavePctg, 10, 'savePctg')
+	generateDailyGoalieReport(_3SavePctg, 3, 'savePctg')
+	generateDailyGoalieReport(_5SavePctg, 5, 'savePctg')
+	generateDailyGoalieReport(_10SavePctg, 10, 'savePctg')
 
-	# generateDailyReport(_3Wins, 3, 'wins')
-	# generateDailyReport(_5Wins, 5, 'wins')
-	# generateDailyReport(_10Wins, 10, 'wins')
-
-
-	# generateDailyReport(_3ShotsAgainst, 3, 'shotsAgainst')
-	# generateDailyReport(_5ShotsAgainst, 5, 'shotsAgainst')
-	# generateDailyReport(_10ShotsAgainst, 10, 'shotsAgainst')
+	generateDailyGoalieReport(_3Wins, 3, 'wins')
+	generateDailyGoalieReport(_5Wins, 5, 'wins')
+	generateDailyGoalieReport(_10Wins, 10, 'wins')
 
 
-	# generateDailyReport(_3GoalsAgainst, 3, 'goalsAgainst')
-	# generateDailyReport(_5GoalsAgainst, 5, 'goalsAgainst')
-	# generateDailyReport(_10GoalsAgainst, 10, 'goalsAgainst')	
+	generateDailyGoalieReport(_3ShotsAgainst, 3, 'shotsAgainst')
+	generateDailyGoalieReport(_5ShotsAgainst, 5, 'shotsAgainst')
+	generateDailyGoalieReport(_10ShotsAgainst, 10, 'shotsAgainst')
 
-	# generateDailyReport(_3Saves, 3, 'saves')
-	# generateDailyReport(_5Saves, 5, 'saves')
-	# generateDailyReport(_10Saves, 10, 'saves')		
 
-	# generateDailyReport(_3TimeOnIce, 3, 'timeOnIce')
-	# generateDailyReport(_5TimeOnIce, 5, 'timeOnIce')
-	# generateDailyReport(_10TimeOnIce, 10, 'timeOnIce')
+	generateDailyGoalieReport(_3GoalsAgainst, 3, 'goalsAgainst')
+	generateDailyGoalieReport(_5GoalsAgainst, 5, 'goalsAgainst')
+	generateDailyGoalieReport(_10GoalsAgainst, 10, 'goalsAgainst')	
 
-	# generateDailyReport(_3GAA, 3, 'goalsAgainstAverage')
-	# generateDailyReport(_5GAA, 5, 'goalsAgainstAverage')
-	# generateDailyReport(_10GAA, 10, 'goalsAgainstAverage')
+	generateDailyGoalieReport(_3Saves, 3, 'saves')
+	generateDailyGoalieReport(_5Saves, 5, 'saves')
+	generateDailyGoalieReport(_10Saves, 10, 'saves')		
+
+	generateDailyGoalieReport(_3TimeOnIce, 3, 'timeOnIce')
+	generateDailyGoalieReport(_5TimeOnIce, 5, 'timeOnIce')
+	generateDailyGoalieReport(_10TimeOnIce, 10, 'timeOnIce')
+
+	generateDailyGoalieReport(_3GAA, 3, 'goalsAgainstAverage')
+	generateDailyGoalieReport(_5GAA, 5, 'goalsAgainstAverage')
+	generateDailyGoalieReport(_10GAA, 10, 'goalsAgainstAverage')
 
 	return
 
@@ -693,12 +693,15 @@ def generateDailySkaterReport(dictionary, lastXGames, stat):
 	t = "Total"
 
 	today = datetime.date.today().isoformat()
+
+	if not (os.path.isdir("Daily Reports/" + today)):
+		os.makedirs("Daily Reports/" + today)	
+
 	fileName = today + " Last " + str(lastXGames) + " " + stat
 
-	# outfile = open("Daily Reports/" + fileName, "w")
 	last = "Last " + str(lastXGames) + " Games"
 	header = [n, t, last]
-	with open("Daily Reports/" + fileName + ".csv", "w", newline='') as outfile:
+	with open("Daily Reports/" + today + "/" + fileName + ".csv", "w", newline='') as outfile:
 		w = csv.writer(outfile)
 
 		w.writerow(header)
@@ -714,9 +717,53 @@ def generateDailySkaterReport(dictionary, lastXGames, stat):
 
 				w.writerow(iterable)
 
-
-
 	return
 
-# updateDatabase()
+def generateDailyGoalieReport(dictionary, lastXGames, stat):
+
+	keys = list(dictionary.keys())
+
+	if stat == 'goalsAgainst' or stat == 'goalsAgainstAverage':
+		keys.sort()
+
+	else:
+		keys.sort(reverse = True)
+
+
+	today = datetime.date.today().isoformat()
+
+	if not (os.path.isdir("Daily Reports/" + today)):
+		os.makedirs("Daily Reports/" + today)
+
+
+	fileName = today + " Last " + str(lastXGames) + " " + stat
+
+	last = "Last " + str(lastXGames) + " Games"
+
+	header = ['Name', 'Season Total', 'Avg Over ' + str(lastXGames) + ' Games' , last]
+
+	with open("Daily Reports/" + today + "/" + fileName + ".csv", "w", newline='') as outfile:
+		w = csv.writer(outfile)
+
+		w.writerow(header)
+
+		for key in keys:
+			for name in dictionary[key]:
+
+				with open("Player Stats/" + name + ".json") as f:
+					data = json.load(f)
+
+				lastNGames = str(data[stat]['last ' + str(lastXGames)])
+				iterable = [name, data[stat]['total'], key, lastNGames.strip("[]")]
+
+				w.writerow(iterable)	
+
+
+
+
+
+
+
+
+updateDatabase()
 sortDailyStats()
