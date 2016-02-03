@@ -164,7 +164,7 @@ def updateDatabase():
 				tmp = penaltyMinutesNew - penaltyMinutesOld['total']
 				playerStats['penaltyMinutes']['last 3'] = [tmp] + penaltyMinutesOld['last 3'][:2]
 				playerStats['penaltyMinutes']['last 5'] = [tmp] + penaltyMinutesOld['last 5'][:4]
-				playerStats['penaltyMinutes']['last 10'] = [tmp] + penaltyMinutes['last 10'][:9]
+				playerStats['penaltyMinutes']['last 10'] = [tmp] + penaltyMinutesOld['last 10'][:9]
 				playerStats['penaltyMinutes']['total'] = penaltyMinutesNew			
 
 
