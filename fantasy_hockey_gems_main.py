@@ -315,9 +315,9 @@ def updateDatabase():
 				playerStats['timeOnIce']['total'] = timeOnIceNew
 
 				goalsAgainstAverageLastGame = goalsAgainstLastGame / timeOnIceLastGame * 60
-				playerStats['goalsAgainstAverage']['last 3'] = [goalsAgainstAverageLastGame] + goalsAgainstAverage['last 3'][:2]
-				playerStats['goalsAgainstAverage']['last 5'] = [goalsAgainstAverageLastGame] + goalsAgainstAverage['last 5'][:4]
-				playerStats['goalsAgainstAverage']['last 10'] = [goalsAgainstAverageLastGame] + goalsAgainstAverage['last 10'][:9]
+				playerStats['goalsAgainstAverage']['last 3'] = [goalsAgainstAverageLastGame] + goalsAgainstAverageOld['last 3'][:2]
+				playerStats['goalsAgainstAverage']['last 5'] = [goalsAgainstAverageLastGame] + goalsAgainstAverageOld['last 5'][:4]
+				playerStats['goalsAgainstAverage']['last 10'] = [goalsAgainstAverageLastGame] + goalsAgainstAverageOld['last 10'][:9]
 				playerStats['goalsAgainstAverage']['total'] = goalsAgainstAverageNew
 
 				with open("Player Stats/" + playerName + ".json", "w") as statsFile:
